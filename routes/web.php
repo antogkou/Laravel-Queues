@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\HighPriorityClient;
 use App\Jobs\ReconcileAccount;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +20,16 @@ Route::get('/', function () {
 });
 Route::get('/log', function () {
     $user = App\Models\User::first();
-    
+
     //dispatch(new ReconcileAccount($user));
-    ReconcileAccount::dispatch($user);
+    ReconcileAccount::dispatch($user)->onQueue('default');
+    return 'Finished';
+});
+Route::get('/log/high', function () {
+    $user = App\Models\User::first();
+
+    //dispatch(new ReconcileAccount($user));
+    HighPriorityClient::dispatch($user)->onQueue('high');
     return 'Finished';
 });
 
