@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ReconcileAccount;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/log', function () {
-    dispatch(function () {
-        logger('Hello there');
-    });
-
+    $user = App\Models\User::first();
+    
+    //dispatch(new ReconcileAccount($user));
+    ReconcileAccount::dispatch($user);
     return 'Finished';
 });
 
